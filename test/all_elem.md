@@ -21,6 +21,7 @@ Some code
 ## A subsection
 
 link to [](another-subsection)
+[https://example.com]()
 [another link]()
 [:command-example]()
 ['option-example']()
