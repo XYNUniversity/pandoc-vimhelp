@@ -5,7 +5,7 @@ A lua writer for pandoc that output vim help files.
 Usage example:
 
 ```shell
-pandoc -f README.md -t /path/to/pandoc-vimhelp/vimhelp.lua -o doc/plugin.txt
+pandoc README.md -t /path/to/pandoc-vimhelp/vimhelp.lua -o doc/plugin.txt
 ```
 
 For more examples and further document, see the [test](test/) directory.

@@ -1,7 +1,8 @@
 -- {{{1 Helpers
 local pipe = pandoc.pipe
 local stringify = (require "pandoc.utils").stringify
-dofile("src/inline-writer.lua")
+local selfdir = string.match(PANDOC_SCRIPT_FILE, "^(.+)/[^/]+$")
+dofile(selfdir .. "/src/inline-writer.lua")
 
 local meta, blocks = PANDOC_DOCUMENT.meta, PANDOC_DOCUMENT.blocks
 local filename = meta.filename or (PANDOC_STATE.output_file or ''):match("[^/]+$")
@@ -21,7 +22,7 @@ function echomsg(kind, ...)
     io.stderr:write('[Warning] ' .. kind:format(...) .. '\n')
 end
 
-local blockstate = loadfile("src/filter.lua")(title_lv, PANDOC_DOCUMENT.blocks)
+local blockstate = loadfile(selfdir .. "/src/filter.lua")(title_lv, PANDOC_DOCUMENT.blocks)
 local stateid = 0
 
 -- Calculate the displayed width of s in vim
@@ -101,12 +102,13 @@ local function genmodeline()
 end
 
 local function procintro(body, headerid)
-    if title_lv == 0 and blocks[1].tag == "Header" and blocks[1].level == 1
-        or title_lv == 1 and blocks[2].tag == "Header" and blocks[1].level == 2
+    if title_lv == 0 and (not blocks[1] or blocks[1].tag == "Header" and blocks[1].level == 1)
+        or title_lv == 1 and (not blocks[1] or not blocks[2]
+            or blocks[2].tag == "Header" and blocks[1].level == 2)
         then
         return body
     end
-    body = Header(title_lv + 1, "Intro", { id = headerid }) .. body
+    body = Header(title_lv + 1, "Intro", { id = headerid }) .. Blocksep() .. body
     local totlen = #titles
     table.insert(titles, 1, titles[totlen])
     table.remove(titles, totlen + 1)
@@ -118,7 +120,8 @@ function Doc(body, metadata, variables)
     local function add(s)
         table.insert(buffer, s)
     end
-    local headerid = pandoc.read('# ' .. meta.title).blocks[1].attr.identifier
+    local headerid = pandoc.read('# ' .. pandoc.utils.stringify(meta.title)).
+        blocks[1].attr.identifier
     body = procintro(body, headerid)
     if meta.raw then
         add(body)
