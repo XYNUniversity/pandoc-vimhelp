@@ -76,12 +76,12 @@ with the link anchor generated for `title` as its anchor.
 
 ### Links
 
-Links with a target (or are created a target by pandoc) are translated to be surrounded by bars (`|`),
-otherwise, they are translated to be surrounded by backticks (`` ` ``)
-if the text is not surrounded by single quotes (`'`).
-However, the surrounding char in the target (if present) is preserved.
-If text is provided to a link, it is translated into `text(link)`,
-where `link` is translated in the rule; to get a "raw" link, use `[](link)` in markdown.
+Targets of a link are translated to be surrounded by bars (`|`)
+if they are not already surrounded by `` ` ``, `|` or `'`, or is an URL beginning with a scheme.
+If both text and target is provided to a link, it is translated into `text(link)`,
+where `link` is translated according to the rule;
+otherwise, the presented part is used as translate result.
+This enables use `[text]()` in markdown to directly create links (so that semantics is provided).
 
 ### Lists
 

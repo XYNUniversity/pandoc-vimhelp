@@ -56,7 +56,14 @@ end
 function Link(s, tgt, tit, attr)
     if tgt ~= '' then
         if tgt:find('^#') then tgt = tgt:sub(2, -1) end
-        if tgt:find("^'.*'$") or tgt:find("^|.*|$") or tgt:find("^`.*`$") then
+        tgt = string.gsub(tgt, "%%([0-9a-fA-F][0-9a-fA-F])",
+            function (c) return string.char(tonumber("0x" .. c)) end)
+        local function surrounded(pat)
+            local patlen = pat:len()
+            return patlen * 2 <= tgt:len() and tgt:sub(1, patlen) == pat and
+                tgt:sub(-patlen, -1) == pat
+        end
+        if surrounded("'") or surrounded("`") or surrounded("|") or tgt:find("^https?://") then
         else
             tgt = '|' .. tgt .. '|'
         end
@@ -66,11 +73,7 @@ function Link(s, tgt, tit, attr)
             return tgt
         end
     else
-        if s:find("^'.*'$") then
-            return s
-        else
-            return '`' .. s .. '`'
-        end
+        return s
     end
 end
 

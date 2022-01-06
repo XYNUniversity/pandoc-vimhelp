@@ -20,11 +20,14 @@ Some code
 
 ## A subsection
 
-link to [](another-subsection)
-[https://example.com]()
-[another link]()
-[:command-example]()
-['option-example']()
+Links:
+[link text example]()
+[url example](https://example.com)
+[another link](another link)
+[ticks surrounding](`link-with-ticks`)
+[bars surrounding](|link-with-bars|)
+[quotes surrounding]('link-with-quotes')
+automatic genearted [another subsection][]
 
 ## another subsection
 

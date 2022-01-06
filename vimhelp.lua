@@ -2,7 +2,8 @@
 local pipe = pandoc.pipe
 local stringify = (require "pandoc.utils").stringify
 local selfdir = string.match(PANDOC_SCRIPT_FILE, "^(.+)/[^/]+$")
-dofile(selfdir .. "/src/inline-writer.lua")
+selfdir = selfdir and selfdir .. '/' or ''
+dofile(selfdir .. "src/inline-writer.lua")
 
 local meta, blocks = PANDOC_DOCUMENT.meta, PANDOC_DOCUMENT.blocks
 local filename = meta.filename or (PANDOC_STATE.output_file or ''):match("[^/]+$")
@@ -22,7 +23,7 @@ function echomsg(kind, ...)
     io.stderr:write('[Warning] ' .. kind:format(...) .. '\n')
 end
 
-local blockstate = loadfile(selfdir .. "/src/filter.lua")(title_lv, PANDOC_DOCUMENT.blocks)
+local blockstate = loadfile(selfdir .. "src/filter.lua")(title_lv, PANDOC_DOCUMENT.blocks)
 local stateid = 0
 
 -- Calculate the displayed width of s in vim
@@ -108,7 +109,9 @@ local function procintro(body, headerid)
         then
         return body
     end
-    body = Header(title_lv + 1, "Intro", { id = headerid }) .. Blocksep() .. body
+    -- Simulate the effect of a real heading
+    if title_lv == 0 then body = Blocksep() .. body end
+    body = Header(title_lv + 1, "Intro", { id = headerid }) .. body
     local totlen = #titles
     table.insert(titles, 1, titles[totlen])
     table.remove(titles, totlen + 1)
