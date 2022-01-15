@@ -6,6 +6,7 @@ A code block:
 
 ```
 Some code
+multilined
 ```
 
 - A list
@@ -27,7 +28,7 @@ Links:
 [ticks surrounding](`link-with-ticks`)
 [bars surrounding](|link-with-bars|)
 [quotes surrounding]('link-with-quotes')
-automatic genearted [another subsection][]
+automatic generated [another subsection][]
 
 ## another subsection
 
@@ -45,6 +46,14 @@ And hard breaks should be kept.
 
 1. Ordered
 1. Lists
+
+```
+Code after lists
+```
+
+```
+code after code
+```
 
 ##### function(a, b, c)
 

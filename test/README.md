@@ -38,6 +38,7 @@ The `filename` is automatically generated from the output file name passed to pa
 if the output file is not specified (i.e. output to stdout),
 it is generated from the title.
 You can also explicitly specify the value through the `filename` metadata.
+The description can be specified with `description` metadata.
 
 `title` can be specified in the metadata, or generated from the first `h1`.
 *Note* that there's not allowed to be any content before the header used as title,
@@ -45,9 +46,14 @@ or the behavior is undefined.
 Also note that the level of title would affect how following headers of different levels
 are processed, for more details, see [Headers](#headers).
 
+Contents before the first non-title header (if any) is collected into a `Intro` section
+with the link anchor generated for `title` as its anchor.
+The title of the section can be configured with `introtitle` metadata.
+
 Some other metadata are available and may affect formatting,
-they are of the same semantic as corresponding vim options:
-`textwidth`, `ambiwidth`, `rtl`.
+they are of the same semantic as corresponding vim options: `textwidth`, `ambiwidth`, `rtl`.
+`shiftwidth` metadata can be used to specify the width of one level of indent;
+however, lists are always indented to justify the paragraph beginning with the list item.
 `indentstr` metadata can be used to specify what string is used to indent one level.
 
 ## Translations
@@ -62,7 +68,7 @@ At most, only a warning is given noting that this feature is not supported.
 Header levels are relative: if title is specified in the metadata,
 sections are divided by `h1`s,
 and if title is generated from the first `h1`,
-sections are divided by `h2`s, and following `h1`s are marked as illegal.
+sections are divided by `h2`s, and following `h1`s are treated as `h2`, raising a warning.
 
 There are only two kinds of section divisors in vim help,
 so only two levels of sections is generated and put into table of contents.
@@ -70,9 +76,6 @@ so only two levels of sections is generated and put into table of contents.
 
 Headers of higher levels are formatted to be with a link,
 functions and commands are recognized and correct forms of links are generated.
-
-Contents before the first non-title header (if any) is collected into a `Intro` section
-with the link anchor generated for `title` as its anchor.
 
 ### Links
 
